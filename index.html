@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Năm Mới 2026 - Marwuy VSync Hội</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000033;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Nền đêm tối */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #000011, #000066);
+            z-index: -2;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 25px;
+            padding: 50px 70px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+            border: 2px solid gold;
+            max-width: 850px;
+            animation: glow 3s infinite alternate;
+            z-index: 10;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 30px gold; }
+            to { box-shadow: 0 0 60px rgba(255, 215, 0, 1); }
+        }
+
+        h1 {
+            font-size: 52px;
+            color: #FFD700;
+            text-shadow: 0 0 15px #FF0000, 0 0 25px #FFFF00;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        p {
+            font-size: 30px;
+            color: white;
+            line-height: 1.8;
+            margin: 25px 0;
+        }
+
+        .signature {
+            font-size: 32px;
+            color: #FF69B4;
+            font-style: italic;
+            margin-top: 40px;
+            text-shadow: 0 0 10px #FFB6C1;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .emoji {
+            font-size: 60px;
+            margin: 20px 0;
+        }
+
+        /* Canvas cho pháo hoa */
+        #fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Tuyết rơi nhẹ */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 20px;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    <canvas id="fireworks"></canvas>
+
+    <div class="card">
+        <h1>Happy New Year 2026!</h1>
+        <p>Anh chị em Marwuy VSync Hội thân mến,</p>
+        <p>Chúc cả nhà năm mới mạnh khoẻ<br>và đạt được mọi ước muốn 🥰</p>
+        <div class="emoji">✨🎉🥂🎆</div>
+        <div class="signature">Em Giang</div>
+    </div>
+
+    <script>
+        // Hiệu ứng tuyết rơi
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerText = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 5 + 8 + 's';
+            snowflake.style.opacity = Math.random() * 0.5 + 0.5;
+            snowflake.style.fontSize = Math.random() * 10 + 15 + 'px';
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => snowflake.remove(), 15000);
+        }
+        setInterval(createSnowflake, 300);
+
+        // Hiệu ứng pháo hoa động (click để bắn pháo hoa)
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        let particles = [];
+
+        function createParticle(x, y) {
+            const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFD700'];
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.random() * 6 - 3,
+                    vy: Math.random() * -10 - 5,
+                    radius: Math.random() * 3 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: 1,
+                    gravity: 0.05,
+                    friction: 0.98
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((p, index) => {
+                p.vy += p.gravity;
+                p.vx *= p.friction;
+                p.vy *= p.friction;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.008;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2, '0');
+                ctx.fill();
+
+                if (p.alpha <= 0) particles.splice(index, 1);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Click để bắn pháo hoa
+        window.addEventListener('click', (e) => {
+            createParticle(e.clientX, e.clientY);
+        });
+
+        // Pháo hoa tự động nhẹ (mỗi 5-10 giây)
+        setInterval(() => {
+            createParticle(Math.random() * canvas.width, canvas.height);
+        }, Math.random() * 5000 + 5000);
+    </script>
+</body>
+</html>
