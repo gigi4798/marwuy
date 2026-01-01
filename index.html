@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,26 +16,20 @@
             font-family: 'Arial', sans-serif;
             overflow: hidden;
             position: relative;
-            cursor: pointer;
         }
 
-        /* Nền đêm tối */
         .background {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(to bottom, #000011, #000066);
             z-index: -2;
         }
 
         .overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.3);
             z-index: -1;
         }
@@ -43,12 +37,14 @@
         .card {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
-            border-radius: 25px;
-            padding: 50px 70px;
+            border-radius: 20px;
+            padding: 40px 30px;
             text-align: center;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
             border: 2px solid gold;
-            max-width: 850px;
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
             animation: glow 3s infinite alternate;
             z-index: 10;
         }
@@ -59,11 +55,15 @@
         }
 
         h1 {
-            font-size: 52px;
+            font-size: 36px;
             color: #FFD700;
             text-shadow: 0 0 15px #FF0000, 0 0 25px #FFFF00;
-            margin-bottom: 30px;
+            margin: 0 0 20px 0;
             animation: pulse 2s infinite;
+        }
+
+        @media (min-width: 480px) {
+            h1 { font-size: 44px; }
         }
 
         @keyframes pulse {
@@ -73,19 +73,36 @@
         }
 
         p {
-            font-size: 30px;
+            font-size: 22px;
             color: white;
-            line-height: 1.8;
-            margin: 25px 0;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        @media (min-width: 480px) {
+            p { font-size: 26px; }
+        }
+
+        .emoji {
+            font-size: 50px;
+            margin: 20px 0;
+        }
+
+        @media (min-width: 480px) {
+            .emoji { font-size: 60px; }
         }
 
         .signature {
-            font-size: 32px;
+            font-size: 28px;
             color: #FF69B4;
             font-style: italic;
-            margin-top: 40px;
+            margin-top: 30px;
             text-shadow: 0 0 10px #FFB6C1;
             animation: fadeIn 2s ease-in;
+        }
+
+        @media (min-width: 480px) {
+            .signature { font-size: 32px; }
         }
 
         @keyframes fadeIn {
@@ -93,28 +110,19 @@
             to { opacity: 1; }
         }
 
-        .emoji {
-            font-size: 60px;
-            margin: 20px 0;
-        }
-
-        /* Canvas cho pháo hoa */
         #fireworks {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 5;
             pointer-events: none;
         }
 
-        /* Tuyết rơi nhẹ */
         .snowflake {
             position: absolute;
             top: -10px;
             color: #fff;
-            font-size: 20px;
+            font-size: 18px;
             pointer-events: none;
             animation: fall linear infinite;
         }
@@ -138,7 +146,7 @@
     </div>
 
     <script>
-        // Hiệu ứng tuyết rơi
+        // Tuyết rơi
         function createSnowflake() {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
@@ -153,7 +161,7 @@
         }
         setInterval(createSnowflake, 300);
 
-        // Hiệu ứng pháo hoa động (click để bắn pháo hoa)
+        // Pháo hoa động
         const canvas = document.getElementById('fireworks');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -207,12 +215,15 @@
 
         animate();
 
-        // Click để bắn pháo hoa
-        window.addEventListener('click', (e) => {
-            createParticle(e.clientX, e.clientY);
+        // Click hoặc chạm để bắn pháo hoa
+        window.addEventListener('click', (e) => createParticle(e.clientX, e.clientY));
+        window.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            createParticle(touch.clientX, touch.clientY);
         });
 
-        // Pháo hoa tự động nhẹ (mỗi 5-10 giây)
+        // Pháo hoa tự động nhẹ
         setInterval(() => {
             createParticle(Math.random() * canvas.width, canvas.height);
         }, Math.random() * 5000 + 5000);
